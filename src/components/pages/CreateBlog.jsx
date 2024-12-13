@@ -3,6 +3,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { db } from '../../firebase'
 import { collection, addDoc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
 const CreateBlog = () => {
   const navigate = useNavigate()
@@ -11,6 +12,7 @@ const CreateBlog = () => {
   const [thumbnail, setThumbnail] = useState(null)
   const [thumbnailPreview, setThumbnailPreview] = useState('')
   const fileInputRef = useRef(null)
+  const { currentUser } = useAuth()
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0]
@@ -34,6 +36,8 @@ const CreateBlog = () => {
         content,
         thumbnailUrl: thumbnailBlobUrl,
         createdAt: new Date(),
+        authorId: currentUser.uid,
+        authorEmail: currentUser.email
       }
 
       await addDoc(collection(db, 'blogs'), blogData)
@@ -96,10 +100,12 @@ const CreateBlog = () => {
             'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
             'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
           ],
-          toolbar: 'undo redo | formatselect | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
+          toolbar: 'undo redo | ' +
+            'blocks | ' +  // This adds the heading dropdown
+            'bold italic underline forecolor | alignleft aligncenter ' +
+            'alignright | bullist numlist outdent indent | ' +
             'removeformat | image ',
+          block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
           file_picker_types: 'image',
           file_picker_callback: function(callback, value, meta) {

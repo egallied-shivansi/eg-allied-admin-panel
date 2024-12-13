@@ -133,10 +133,12 @@ const EditBlog = () => {
             'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
             'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
           ],
-          toolbar: 'undo redo | formatselect | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | image | help',
+          toolbar: 'undo redo | ' +
+            'blocks | ' +  // This adds the heading dropdown
+            'bold italic underline forecolor | alignleft aligncenter ' +
+            'alignright  | bullist numlist outdent indent | ' +
+            'removeformat | image ',
+          block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
           file_picker_types: 'image',
           file_picker_callback: function(callback, value, meta) {

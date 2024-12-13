@@ -1,12 +1,25 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
 const DashboardLayout = () => {
+    const { logout } = useAuth()
+    const navigate = useNavigate()
     const navLinks = [
       { path: 'career-form', name: 'Career Form' },
       { path: 'partner-form', name: 'Partner Form' },
       { path: 'contact-form', name: 'Contact Form' },
       { path: 'blogs', name: 'Blogs' },
+      { path: 'create-admin', name: 'Create Admin' },
     ]
+
+    const handleLogout = async () => {
+      try {
+        await logout()
+        navigate('/login')
+      } catch (error) {
+        console.error('Failed to logout:', error)
+      }
+    }
 
   return (
     <div className="flex h-full p-2 gap-4">
@@ -28,6 +41,13 @@ const DashboardLayout = () => {
               {link.name}
             </NavLink>
           ))}
+          
+          <button
+            onClick={handleLogout}
+            className="block w-full px-4 text-sm text-gray-600 hover:text-black py-2 rounded-xl transition-colors hover:bg-red-50"
+          >
+            Logout
+          </button>
         </nav>
       </div>
 
